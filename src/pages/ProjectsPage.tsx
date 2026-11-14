@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   FolderKanban, ArrowRight, ExternalLink, CheckCircle2, 
   Sparkles, Code2, Globe, ShieldCheck, Layers, Cpu,
-  Building2, FileText, Lightbulb, Hammer
+  Building2, FileText, Lightbulb, Hammer, Smartphone
 } from 'lucide-react';
 import { ProjectVideoPlayer } from '../components/ProjectVideoPlayer';
+import { ProjectMobileShowcase, MobileScreenshot } from '../components/ProjectMobileShowcase';
 import { AmbientWaveCanvas } from '../components/AmbientWaveCanvas';
 
 interface ProjectsPageProps {
@@ -19,10 +20,11 @@ interface ProjectItem {
   categoryBadge: string;
   tagline: string;
   description: string;
-  liveUrl: string;
-  displayUrl: string;
+  liveUrl?: string;
+  displayUrl?: string;
   videoSrc?: string;
   poster?: string;
+  screenshots?: MobileScreenshot[];
   features: string[];
   techStack: string[];
   icon: React.ElementType;
@@ -141,6 +143,79 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate }) => {
         badgeText: 'text-purple-400',
         accentColor: '#8b5cf6',
       }
+    },
+    {
+      id: 'jigarthanda-pos',
+      number: '05',
+      name: 'Madurai Vilakkuthoon Hanifa Jigarthanda',
+      category: 'Mobile App Development',
+      categoryBadge: 'Mobile POS & Business App',
+      tagline: 'Smart POS, billing & shop operations mobile application.',
+      description: 'A modern mobile-based Point of Sale (POS) and business management application developed for Madurai Vilakkuthoon Hanifa Jigarthanda. The application helps manage daily shop operations, including menu management, order processing, billing, payment tracking, sales reports and Bluetooth thermal printing through a simple and user-friendly mobile interface.',
+      screenshots: [
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.50.01 AM.jpeg',
+          caption: 'Smart POS Billing & Menu Catalog',
+          description: 'Category menu browsing, quick-add to cart, and automatic total calculations.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.50.02 AM.jpeg',
+          caption: 'Cart & Order Checkout Workflow',
+          description: 'Item quantity adjustments, real-time tax calculation, and instant payment recording.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.50.02 AM (1).jpeg',
+          caption: 'Live Order Management',
+          description: 'Active order status tracking, customer order history, and multi-device sync.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.50.02 AM (2).jpeg',
+          caption: 'Bluetooth Thermal Bill Printing',
+          description: 'Direct mobile bill printing with Bluetooth thermal printer auto-reconnection.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.50.02 AM (3).jpeg',
+          caption: 'Sales Reports & Revenue Analytics',
+          description: 'Daily sales summaries, monthly revenue overview, and Cash vs UPI payment analysis.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.51.17 AM.jpeg',
+          caption: 'Multi-User Role Permissions',
+          description: 'Granular access controls for Admin, Shop Manager, and Staff accounts.'
+        },
+        {
+          src: '/WhatsApp Image 2026-11-15 at 12.51.42 AM.jpeg',
+          caption: 'Business & Hardware Settings',
+          description: 'Shop profile management, GST billing details, and printer hardware configuration.'
+        }
+      ],
+      features: [
+        'Smart POS Billing: Browse menu items by category, manage cart quantities, and generate bills with automatic totals',
+        'Order Management: View customer orders, track order history, and monitor daily sales across connected devices',
+        'Bluetooth Thermal Printing: Connect Bluetooth thermal printers and print bills directly from the application',
+        'Sales Reports & Analytics: Daily sales summaries, monthly revenue overview, and Cash vs UPI payment breakdown',
+        'Multi-User Access: Dedicated permission levels for Admin, Manager, and Staff with restricted access controls',
+        'Business Settings: Shop profile management, GST billing details, user profile controls, and printer settings'
+      ],
+      techStack: [
+        'React Native',
+        'Expo SDK 54',
+        'TypeScript',
+        'Expo Router',
+        'Node.js',
+        'TanStack Query',
+        'Context API',
+        'AsyncStorage',
+        'Bluetooth Classic',
+        'REST API'
+      ],
+      icon: Smartphone,
+      brandTheme: {
+        gradient: 'from-rose-950 via-slate-950 to-amber-950',
+        badgeBg: 'bg-rose-500/20',
+        badgeText: 'text-rose-400',
+        accentColor: '#f43f5e',
+      }
     }
   ];
 
@@ -183,7 +258,8 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate }) => {
           {/* Quick Filter Tabs */}
           <div className="flex items-center justify-center gap-2 pt-4 flex-wrap">
             {[
-              { id: 'all', label: 'All Projects (4)' },
+              { id: 'all', label: 'All Projects (5)' },
+              { id: 'mobile', label: 'Mobile Apps' },
               { id: 'construction', label: 'Construction & Civil' },
               { id: 'legal', label: 'Legal & E-Gov' },
               { id: 'manufacturing', label: 'B2B & Products' },
@@ -219,17 +295,26 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate }) => {
             >
               <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${isEven ? 'lg:[direction:rtl]' : ''}`}>
                 
-                {/* ── PREVIEW / VIDEO PLAYER SIDE (7 cols on lg) ── */}
+                {/* ── PREVIEW / VIDEO PLAYER OR MOBILE SHOWCASE (7 cols on lg) ── */}
                 <div className={`lg:col-span-7 ${isEven ? 'lg:[direction:ltr]' : ''}`}>
-                  <ProjectVideoPlayer
-                    videoSrc={project.videoSrc}
-                    poster={project.poster}
-                    title={project.name}
-                    liveUrl={project.liveUrl}
-                    displayUrl={project.displayUrl}
-                    category={project.categoryBadge}
-                    brandTheme={project.brandTheme}
-                  />
+                  {project.screenshots && project.screenshots.length > 0 ? (
+                    <ProjectMobileShowcase
+                      screenshots={project.screenshots}
+                      title={project.name}
+                      category={project.categoryBadge}
+                      brandTheme={project.brandTheme}
+                    />
+                  ) : (
+                    <ProjectVideoPlayer
+                      videoSrc={project.videoSrc}
+                      poster={project.poster}
+                      title={project.name}
+                      liveUrl={project.liveUrl || '#'}
+                      displayUrl={project.displayUrl || ''}
+                      category={project.categoryBadge}
+                      brandTheme={project.brandTheme}
+                    />
+                  )}
                 </div>
 
                 {/* ── PROJECT INFORMATION SIDE (5 cols on lg) ───── */}
@@ -294,23 +379,46 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate }) => {
 
                   {/* Action Buttons */}
                   <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
-                    <button
-                      onClick={() => handleOpenLive(project.liveUrl)}
-                      className="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
-                    >
-                      <span>View Project</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    {project.liveUrl ? (
+                      <>
+                        <button
+                          onClick={() => handleOpenLive(project.liveUrl!)}
+                          className="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                        >
+                          <span>View Project</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
 
-                    <button
-                      onClick={() => handleOpenLive(project.liveUrl)}
-                      className="py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 border border-slate-300 transition-colors shadow-sm"
-                      title={`Visit ${project.displayUrl}`}
-                    >
-                      <Globe className="w-3.5 h-3.5 text-brand-purple" />
-                      <span>Live Website</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
-                    </button>
+                        <button
+                          onClick={() => handleOpenLive(project.liveUrl!)}
+                          className="py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 border border-slate-300 transition-colors shadow-sm"
+                          title={`Visit ${project.displayUrl}`}
+                        >
+                          <Globe className="w-3.5 h-3.5 text-brand-purple" />
+                          <span>Live Website</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => onNavigate('contact')}
+                          className="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                        >
+                          <span>Request App Demo</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          onClick={() => onNavigate('contact')}
+                          className="py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 border border-slate-300 transition-colors shadow-sm"
+                          title="Enquire about custom mobile app development"
+                        >
+                          <Smartphone className="w-3.5 h-3.5 text-rose-500" />
+                          <span>Enquire About App</span>
+                        </button>
+                      </>
+                    )}
                   </div>
 
                 </div>
